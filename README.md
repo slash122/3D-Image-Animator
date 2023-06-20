@@ -6,6 +6,7 @@ Albo old way
 git clone <ssh key>
   
 Przy konfiguracji projektu wybrac QMake, kompilator MSVC
+
 Open project -> GFK_test.pro
 
   
