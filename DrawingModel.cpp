@@ -21,6 +21,7 @@ DrawingModel::DrawingModel(QGraphicsView* view) : grView(view)
     renderingBuffer = new QImage( grViewSize.width(), grViewSize.height(), QImage::Format_RGB32);
     renderingPainter = new QPainter(renderingBuffer);
     renderingPainter->fillRect(0, 0, renderingBuffer->width(), renderingBuffer->height(), Qt::white );
+    renderingBufferPixels = reinterpret_cast<QRgb*>(renderingBuffer->bits()); //Dzięki temu są szybsze operacje na pikselach
 }
 
 void DrawingModel::drawLines(const std::vector<QVector2D>& vertices, const std::vector<QVector2D>& vertexIndeces, QColor color)
@@ -61,7 +62,8 @@ void DrawingModel::mapTexture(const std::vector<QVector3D>& vertices, const std:
                     QVector2D uv = interpolateTextureCoordinates( x, y, v0, v1, v2, uv0, uv1, uv2);
                     Texel texel = sampleTexture(uv, texture);
 
-                    renderingBuffer->setPixelColor( x, y, texel.color);
+                    //renderingBuffer->setPixelColor( x, y, texel.color);
+                    putPixel(x, y, texel.color);
                 }
             }
 
@@ -78,8 +80,9 @@ void DrawingModel::endOfFrame()
 
 //____________________Private methods_________________________//
 
-bool DrawingModel::pointInTriangle(float x, float y, const QVector3D& v0, const QVector3D& v1, const QVector3D& v2)
+bool DrawingModel::pointInTriangle(int x, int y, const QVector3D& v0, const QVector3D& v1, const QVector3D& v2)
 {
+    //Tak naprawde to nie jest prawidlowa funkcja, ale dziala XD
     QVector2D noZ_v0( v0.x(), v0.y());
     QVector2D noZ_v1( v1.x(), v1.y());
     QVector2D noZ_v2( v2.x(), v2.y());
@@ -103,7 +106,7 @@ bool DrawingModel::pointInTriangle(float x, float y, const QVector3D& v0, const 
     return  (u >= 0) && (v >= 0) && (u+v <= 1);
 }
 
-QVector2D DrawingModel::interpolateTextureCoordinates(float x, float y, const QVector3D& v0, const QVector3D& v1, const QVector3D& v2, const QVector2D& uv0, const QVector2D& uv1, const QVector2D& uv2)
+QVector2D DrawingModel::interpolateTextureCoordinates(int x, int y, const QVector3D& v0, const QVector3D& v1, const QVector3D& v2, const QVector2D& uv0, const QVector2D& uv1, const QVector2D& uv2)
 {
     float w0 = 1. / v0.z();
     float w1 = 1. / v1.z();
@@ -125,20 +128,39 @@ QVector2D DrawingModel::interpolateTextureCoordinates(float x, float y, const QV
 
 Texel DrawingModel::sampleTexture(const QVector2D& uv, const QImage& texture)
 {
+
     int tx = uv.x() * (texture.width() - 1);
     int ty = uv.y() * (texture.height() - 1);
 
+    //Czasami wypisywał pixel out of range, ale nie wiem dlaczego i nie chce, wiec dodalem taki chujowy kawalek kodu
+    tx = std::min(tx,texture.width()-1);
+    ty = std::min(ty,texture.height()-1);
+    tx = std::max(tx,0);
+    ty = std::max(ty,0);
+    //
+
     Texel texel;
-    texel.set( QVector2D(tx,ty), texture.pixel(tx, ty) );
+    texel.set( QVector2D(tx,ty), getPixel(tx,ty,texture) );
     return texel;
 }
 
 bool DrawingModel::inRenderSpace(float x, float y)
 {
-    if ( x >= grViewSize.width() || x <= 0)
+    if ( x >= grViewSize.width() || x < 0)
         return false;
-    if ( y >= grViewSize.height() || y <= 0)
+    if ( y >= grViewSize.height() || y < 0)
         return false;
 
     return true;
+}
+
+void DrawingModel::putPixel(int x, int y,const QRgb& color)
+{
+    renderingBufferPixels[ y * grViewSize.width() + x] = color;
+}
+
+QRgb DrawingModel::getPixel(int x, int y,const QImage& texture)
+{
+    QRgb* texData = reinterpret_cast<QRgb*>((  const_cast<QImage&>(texture).bits() ));
+    return texData[ y * texture.width() + x];
 }

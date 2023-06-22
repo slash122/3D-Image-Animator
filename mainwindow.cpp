@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     //Translation slidery
     ui->translateX->setMaximum(100); ui->translateX->setMinimum(-100); ui->translateX->setValue(0);
     ui->translateY->setMaximum(100); ui->translateY->setMinimum(-100); ui->translateY->setValue(0);
-    ui->translateZ->setMaximum(100); ui->translateZ->setMinimum(-100); ui->translateZ->setValue(0);
+    ui->translateZ->setMaximum(100); ui->translateZ->setMinimum(0); ui->translateZ->setValue(0);
 
     //Inicjalizacja controllera renderu
     drawingModel = new DrawingModel(ui->graphicsView);
@@ -25,17 +25,19 @@ MainWindow::MainWindow(QWidget *parent)
     QPainter textPaint(texture);
     textPaint.fillRect(0,0,100,100, Qt::white);
 
+    //Ramka pierwszej tekstury
     //   A---D
     //   | \ |
     //   B---C
     //
-    vertices.push_back(QVector4D(-0.3f,0.3f,0,1)); //A
-    vertices.push_back(QVector4D(-0.3f,-0.3f,0,1)); //B
-    vertices.push_back(QVector4D(0.3f,-0.3f,0,1)); //C
-    vertices.push_back(QVector4D(0.3f,0.3f,0,1)); //D
+    vertices.push_back(QVector4D(-1,1,0,1)); //A
+    vertices.push_back(QVector4D(-1,-1,0,1)); //B
+    vertices.push_back(QVector4D(1,-1,0,1)); //C
+    vertices.push_back(QVector4D(1,1,0,1)); //D
 
     triangles.push_back(QVector3D(2,1,0)); //CBA
     triangles.push_back(QVector3D(2,0,3)); //CAD
+
 
     UVvertices.push_back(QVector2D(0,0)); //A
     UVvertices.push_back(QVector2D(0,1)); //B
@@ -55,6 +57,7 @@ void MainWindow::redrawTexture()
 
     std::vector<QVector4D> tmpV = vertices;
     transformVertices(tmpV, tMatrices);
+
     std::vector<QVector3D> vertScreen = toScreen(tmpV, gSize);
     drawingModel->mapTexture(vertScreen,triangles,UVvertices,*texture);
 }
@@ -123,7 +126,7 @@ void MainWindow::on_loadTexture_clicked()
 
 void MainWindow::on_translateX_sliderMoved(int position)
 {
-    float position_f = (float) position / 200.;
+    float position_f = (float) position / 10.;
 
     QMatrix4x4 translate( 1, 0, 0, 0,
                       0, 1, 0, 0,
@@ -136,7 +139,7 @@ void MainWindow::on_translateX_sliderMoved(int position)
 
 void MainWindow::on_translateY_sliderMoved(int position)
 {
-    float position_f = (float) position / 200.;
+    float position_f = (float) position / 10.;
 
     QMatrix4x4 translate( 1, 0, 0, 0,
                          0, 1, 0, 0,
@@ -149,7 +152,7 @@ void MainWindow::on_translateY_sliderMoved(int position)
 
 void MainWindow::on_translateZ_sliderMoved(int position)
 {
-    float position_f = (float) position / 200.;
+    float position_f = (float) position / 10.;
 
     QMatrix4x4 translate( 1, 0, 0, 0,
                          0, 1, 0, 0,

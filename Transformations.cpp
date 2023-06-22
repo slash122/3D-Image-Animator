@@ -45,10 +45,10 @@ std::vector<QVector3D> toScreen(std::vector<QVector4D>& vertices,const QSize& sc
     for (auto i = vertices.begin(); i != vertices.end(); i++)
     {
         QVector3D tmp;
-        double invZ = 1. / (i->z() + 0.7);
+        double invZ = 1. / (i->z() + 1.);
         tmp.setX( i->x() * invZ * scrSize.width()/2 + scrSize.width()/2 );
         tmp.setY( - i->y() * invZ * scrSize.height()/2 + scrSize.height()/2 );
-        tmp.setZ( i->z() + 0.7 );
+        tmp.setZ( i->z() + 1.);
         //Throw off w afterwards
         screenVert.push_back(tmp);
     }

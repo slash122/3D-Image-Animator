@@ -49,6 +49,7 @@ private:
     TransformationMatrices tMatrices;
     std::vector<QVector4D> vertices;
     std::vector<QVector3D> triangles;
+
     std::vector<QVector2D> UVvertices;
 
     void redrawTexture();
