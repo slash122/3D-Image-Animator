@@ -1,25 +1,39 @@
 #include "Transformations.h"
 
-RotationMatrices::RotationMatrices()
+TransformationMatrices::TransformationMatrices()
 {
     rotateX.setToIdentity();
     rotateY.setToIdentity();
     rotateZ.setToIdentity();
+
+    translateX.setToIdentity();
+    translateY.setToIdentity();
+    translateZ.setToIdentity();
 }
 
-QMatrix4x4 RotationMatrices::getRotation() const
+QMatrix4x4 TransformationMatrices::getRotation() const
 {
     return rotateX * rotateY * rotateZ;
 }
 
+QMatrix4x4 TransformationMatrices::getTranslation() const
+{
+    return translateX * translateY * translateZ;
+}
+
+QMatrix4x4 TransformationMatrices::getTransformation() const
+{
+    return getRotation() * getTranslation();
+}
 
 
-void transformVertices(std::vector<QVector4D>& vertices,const RotationMatrices& rotMatrices)
+
+void transformVertices(std::vector<QVector4D>& vertices,const TransformationMatrices& tMatrices)
 {
     for (auto i = vertices.begin(); i != vertices.end(); i++)
     {
         QVector4D vertex(i->x(),i->y(),i->z(),i->w());
-        vertex = vertex * rotMatrices.getRotation();
+        vertex = vertex * tMatrices.getTransformation();
         i->setX(vertex.x()); i->setY(vertex.y());
         i->setZ(vertex.z()); i->setW(vertex.w());
     }

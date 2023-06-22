@@ -8,7 +8,6 @@
 #include <QtCore>
 #include <QtGui>
 #include "DrawingModel.h"
-#include "qfiledialog.h"
 
 
 
@@ -33,6 +32,12 @@ private slots:
 
     void on_loadTexture_clicked();
 
+    void on_translateX_sliderMoved(int position);
+
+    void on_translateY_sliderMoved(int position);
+
+    void on_translateZ_sliderMoved(int position);
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *mainScene;
@@ -41,7 +46,7 @@ private:
 
     DrawingModel* drawingModel;
 
-    RotationMatrices rotMatrices;
+    TransformationMatrices tMatrices;
     std::vector<QVector4D> vertices;
     std::vector<QVector3D> triangles;
     std::vector<QVector2D> UVvertices;
