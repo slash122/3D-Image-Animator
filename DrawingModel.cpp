@@ -56,7 +56,7 @@ void DrawingModel::mapTexture(const std::vector<QVector3D>& vertices, const std:
         {
             for (int y = minY; y < maxY; y+=1)
             {
-                if ( pointInTriangle(x, y, v0, v1, v2) )
+                if ( pointInTriangle(x, y, v0, v1, v2) && inRenderSpace(x,y) )
                 {
                     QVector2D uv = interpolateTextureCoordinates( x, y, v0, v1, v2, uv0, uv1, uv2);
                     Texel texel = sampleTexture(uv, texture);
@@ -131,4 +131,14 @@ Texel DrawingModel::sampleTexture(const QVector2D& uv, const QImage& texture)
     Texel texel;
     texel.set( QVector2D(tx,ty), texture.pixel(tx, ty) );
     return texel;
+}
+
+bool DrawingModel::inRenderSpace(float x, float y)
+{
+    if ( x >= grViewSize.width() || x <= 0)
+        return false;
+    if ( y >= grViewSize.height() || y <= 0)
+        return false;
+
+    return true;
 }

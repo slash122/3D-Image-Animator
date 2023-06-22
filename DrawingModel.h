@@ -27,6 +27,7 @@ private:
     bool pointInTriangle(float x, float y, const QVector3D& v0, const QVector3D& v1, const QVector3D& v2);
     QVector2D interpolateTextureCoordinates(float x, float y, const QVector3D& v0, const QVector3D& v1, const QVector3D& v2, const QVector2D& uv0, const QVector2D& uv1, const QVector2D& uv2);
     Texel sampleTexture(const QVector2D& uv, const QImage& texture);
+    bool inRenderSpace(float x, float y);
 
     QGraphicsView* grView;
     QGraphicsScene* grScene;
