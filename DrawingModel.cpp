@@ -1,3 +1,4 @@
+//by Glib Avrutin
 #include "DrawingModel.h"
 
 //Texel
@@ -76,6 +77,11 @@ void DrawingModel::endOfFrame()
 {
     grScene->clear();
     renderingPainter->fillRect(0, 0, renderingBuffer->width(), renderingBuffer->height(), Qt::white );
+}
+
+QSize DrawingModel::getViewSize()
+{
+    return grViewSize;
 }
 
 //____________________Private methods_________________________//
@@ -163,4 +169,9 @@ QRgb DrawingModel::getPixel(int x, int y,const QImage& texture)
 {
     QRgb* texData = reinterpret_cast<QRgb*>((  const_cast<QImage&>(texture).bits() ));
     return texData[ y * texture.width() + x];
+}
+
+QGraphicsScene* DrawingModel::getScene()
+{
+    return grScene;
 }

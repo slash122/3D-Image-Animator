@@ -2,164 +2,159 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "qfiledialog.h"
-
+#include <QDebug>
+#include "qmessagebox.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setFixedSize(1280,720);
-
-    //Translation slidery
-    ui->translateX->setMaximum(100); ui->translateX->setMinimum(-100); ui->translateX->setValue(0);
-    ui->translateY->setMaximum(100); ui->translateY->setMinimum(-100); ui->translateY->setValue(0);
-    ui->translateZ->setMaximum(100); ui->translateZ->setMinimum(0); ui->translateZ->setValue(0);
+    this->setFixedSize(1193,640);
+    this->setWindowTitle("GFK Project N28");
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //Inicjalizacja controllera renderu
     drawingModel = new DrawingModel(ui->graphicsView);
-    QSize gSize = ui->graphicsView->size();
 
-    //Ustawianie default texutry
-    texture = new QImage(100,100, QImage::Format_RGB32);
-    QPainter textPaint(texture);
-    textPaint.fillRect(0,0,100,100, Qt::white);
+    //Ustawianie default textur
+    texture1 = new QImage(100,100, QImage::Format_RGB32);
+    QPainter text1Paint(texture1);
+    text1Paint.fillRect(0,0,100,100, Qt::white);
 
-    //Ramka pierwszej tekstury
-    //   A---D
-    //   | \ |
-    //   B---C
+    texture2 = new QImage(100,100, QImage::Format_RGB32);
+    QPainter text2Paint(texture2);
+    text2Paint.fillRect(0,0,100,100, Qt::white);
+
+    //________________________
+    //Combo box initialization
+    ComboBoxIsInitialized = false;
+    ui->comboBoxTransType->addItem("Default transition");
+    ui->comboBoxTransType->addItem("Slide from top");
+    ui->comboBoxTransType->addItem("Slide from bottom");
+    ui->comboBoxTransType->addItem("Slide from left side");
+    ui->comboBoxTransType->addItem("Slide from right side");
+    ui->comboBoxTransType->addItem("Approaching box");
+    ui->comboBoxTransType->addItem("Leaving box");
+    ui->comboBoxTransType->addItem("Darkening transition");
+    ui->comboBoxTransType->addItem("Alpha transition");
+    ui->comboBoxTransType->addItem("Y Rotation");
+    ui->comboBoxTransType->addItem("X Rotation");
+    ui->comboBoxTransType->addItem("Shutter");
+    ui->comboBoxTransType->addItem("Tunnel");
+    ui->comboBoxTransType->addItem("Cube");
+    ui->comboBoxTransType->addItem("Ring");
+    ui->comboBoxTransType->addItem("Blur transition");
+    ui->comboBoxTransType->addItem("Pixel brightness transition");
+    ComboBoxIsInitialized = true;
+    //________________________
+    ui->lineEditNumOfFrames->setInputMask("99");
     //
-    vertices.push_back(QVector4D(-1,1,0,1)); //A
-    vertices.push_back(QVector4D(-1,-1,0,1)); //B
-    vertices.push_back(QVector4D(1,-1,0,1)); //C
-    vertices.push_back(QVector4D(1,1,0,1)); //D
+    transition = new Transition();
+    transition->setModel(drawingModel);
+    transition->setFirstTexture(texture1);
+    transition->setSecondTexture(texture2);
+    transition->initTransition( TransitionTypes::Default );
 
-    triangles.push_back(QVector3D(2,1,0)); //CBA
-    triangles.push_back(QVector3D(2,0,3)); //CAD
-
-
-    UVvertices.push_back(QVector2D(0,0)); //A
-    UVvertices.push_back(QVector2D(0,1)); //B
-    UVvertices.push_back(QVector2D(1,1)); //C
-    UVvertices.push_back(QVector2D(1,0)); //D
-
-    std::vector<QVector3D> vertScreen = toScreen(vertices, gSize);
-    drawingModel->mapTexture(vertScreen,triangles,UVvertices,*texture);
+    currentFrame = 0;
+    transition->drawFrame(currentFrame);
 }
 
-
-void MainWindow::redrawTexture()
-{
-
-    QSize gSize = ui->graphicsView->size();
-    drawingModel->endOfFrame();
-
-    std::vector<QVector4D> tmpV = vertices;
-    transformVertices(tmpV, tMatrices);
-
-    std::vector<QVector3D> vertScreen = toScreen(tmpV, gSize);
-    drawingModel->mapTexture(vertScreen,triangles,UVvertices,*texture);
-}
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete texture1;
+    delete texture2;
+    delete drawingModel;
+    delete transition;
 }
 
-
-
-void MainWindow::on_rotateY_sliderMoved(int position)
+void MainWindow::on_comboBoxTransType_currentIndexChanged(int index)
 {
-    position *= 3;
-    double radians = position * 3.1415 / 180.0f;
-
-    QMatrix4x4 rotate( cos(radians), 0, sin(radians), 0,
-                      0, 1, 0, 0,
-                      -sin(radians), 0, cos(radians), 0,
-                      0, 0, 0, 1);
-
-    tMatrices.rotateY = rotate;
-    redrawTexture();
+    if ( ComboBoxIsInitialized != false)
+    {
+        transition->initTransition( static_cast<TransitionTypes>(index) );
+        transition->drawFrame(currentFrame);
+    }
 }
 
 
-void MainWindow::on_rotateX_sliderMoved(int position)
-{
-    position *= 3;
-    double radians = position * 3.1415 / 180.0f;
-
-    QMatrix4x4 rotate( 1, 0, 0, 0,
-                      0, cos(radians), -sin(radians), 0,
-                      0, sin(radians), cos(radians), 0,
-                      0, 0, 0, 1);
-
-    tMatrices.rotateX = rotate;
-    redrawTexture();
-}
-
-
-void MainWindow::on_rotateZ_sliderMoved(int position)
-{
-    position *= 3;
-    double radians = position * 3.1415 / 180.0f;
-
-    QMatrix4x4 rotate( cos(radians), -sin(radians), 0, 0,
-                      sin(radians), cos(radians), 0, 0,
-                      0, 0, 1, 0,
-                      0, 0, 0, 1);
-
-    tMatrices.rotateZ = rotate;
-    redrawTexture();
-}
-
-
-void MainWindow::on_loadTexture_clicked()
+void MainWindow::on_pushButtonLoad1_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                     "/home",
                                                     tr("Images (*.png *.xpm *.jpg)"));
-    texture->load(fileName);
-    redrawTexture();
+    if ( fileName != "")
+    {
+        texture1->load(fileName);
+        transition->setFirstTexture(texture1);
+        transition->drawFrame(currentFrame);
+        ui->path1Image->setText(fileName);
+    }
 }
 
-
-void MainWindow::on_translateX_sliderMoved(int position)
+void MainWindow::on_pushButtonLoad2_clicked()
 {
-    float position_f = (float) position / 10.;
-
-    QMatrix4x4 translate( 1, 0, 0, 0,
-                      0, 1, 0, 0,
-                      0, 0, 1, 0,
-                      position_f, 0, 0, 1);
-
-    tMatrices.translateX = translate;
-    redrawTexture();
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                    "/home",
+                                                    tr("Images (*.png *.xpm *.jpg)"));
+    if ( fileName != "")
+    {
+        texture2->load(fileName);
+        transition->setSecondTexture(texture2);
+        transition->drawFrame(currentFrame);
+        ui->path2Image->setText(fileName);
+    }
 }
 
-void MainWindow::on_translateY_sliderMoved(int position)
+void MainWindow::on_horizontalSliderFrameline_sliderMoved(int position)
 {
-    float position_f = (float) position / 10.;
-
-    QMatrix4x4 translate( 1, 0, 0, 0,
-                         0, 1, 0, 0,
-                         0, 0, 1, 0,
-                         0, position_f, 0, 1);
-
-    tMatrices.translateY = translate;
-    redrawTexture();
+    transition->drawFrame(position);
+    currentFrame = position;
 }
 
-void MainWindow::on_translateZ_sliderMoved(int position)
+
+void MainWindow::on_pushButtonSave_clicked()
 {
-    float position_f = (float) position / 10.;
+    QString lineText = ui->lineEditNumOfFrames->text();
+    std::string lineString = lineText.toStdString();
 
-    QMatrix4x4 translate( 1, 0, 0, 0,
-                         0, 1, 0, 0,
-                         0, 0, 1, position_f,
-                         0, 0, position_f, 1);
+    bool lineStringIsEmpty = true;
+    int frameNum = 0;
+    if (lineString != "")
+    {
+        lineStringIsEmpty = false;
+        frameNum = std::stoi(lineString);
+    }
+    QMessageBox messageBox;
 
-    tMatrices.translateZ = translate;
-    redrawTexture();
+
+    if (frameNum < 3 || frameNum > 25 || lineStringIsEmpty == true)
+    {
+        messageBox.critical(0,"Error","Choose number of frames between 3 and 25");
+        messageBox.setFixedSize(500,200);
+        messageBox.show();
+    }
+    else
+    {
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Save Bitmap Sequence"),
+                                                        QString(),
+                                                        tr("Images"));
+
+        QImage saveImage(drawingModel->getViewSize(),QImage::Format_ARGB32);
+        QPainter savePainter(&saveImage);
+        float frameInterval = 100. / (frameNum - 1);
+        int frameNum = 0;
+        for ( int i = 0; i <= 100; i+=frameInterval)
+        {
+            transition->drawFrame(i);
+            drawingModel->getScene()->render(&savePainter);
+            saveImage.save( fileName + QString::fromStdString("_" + std::to_string(frameNum) + ".bmp"));
+            frameNum++;
+        }
+
+        transition->drawFrame(currentFrame);
+    }
 }
-

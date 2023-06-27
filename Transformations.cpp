@@ -1,3 +1,4 @@
+//by Glib Avrutin
 #include "Transformations.h"
 
 TransformationMatrices::TransformationMatrices()

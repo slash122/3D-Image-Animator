@@ -1,4 +1,4 @@
-
+//by Glib Avrutin
 #ifndef DRAWINGMODEL_H
 #define DRAWINGMODEL_H
 
@@ -21,7 +21,9 @@ public:
     void drawLines(const std::vector<QVector2D>& vertices, const std::vector<QVector2D>& vertexIndeces, QColor color = Qt::black);
     void mapTexture(const std::vector<QVector3D>& vertices, const std::vector<QVector3D>& triangles, const std::vector<QVector2D>& textureUVVertices, const QImage& texture);
     void endOfFrame();
-    ~DrawingModel();
+    QSize getViewSize();
+    QGraphicsScene* getScene();
+    ~DrawingModel() {}
 
 private:
     bool pointInTriangle(int x, int y, const QVector3D& v0, const QVector3D& v1, const QVector3D& v2);

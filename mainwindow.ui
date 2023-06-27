@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>720</height>
+    <width>1193</width>
+    <height>638</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,195 +19,208 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>721</width>
-      <height>511</height>
+      <width>811</width>
+      <height>551</height>
      </rect>
     </property>
     <property name="interactive">
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QSlider" name="rotateY">
+   <widget class="QSlider" name="horizontalSliderFrameline">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>80</y>
-      <width>321</width>
-      <height>18</height>
+      <x>10</x>
+      <y>570</y>
+      <width>811</width>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="maximum">
+     <number>100</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBoxTransType">
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>10</y>
+      <width>211</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="maxVisibleItems">
+     <number>20</number>
     </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>80</y>
-      <width>49</width>
+      <x>840</x>
+      <y>10</y>
+      <width>81</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Rotate Y</string>
+     <string>Transition type:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>30</y>
-      <width>49</width>
+      <x>840</x>
+      <y>70</y>
+      <width>81</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Rotate X</string>
-    </property>
-   </widget>
-   <widget class="QSlider" name="rotateX">
-    <property name="geometry">
-     <rect>
-      <x>910</x>
-      <y>30</y>
-      <width>321</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+     <string>First image:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>130</y>
-      <width>49</width>
+      <x>840</x>
+      <y>160</y>
+      <width>81</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Rotate Z</string>
-    </property>
-   </widget>
-   <widget class="QSlider" name="rotateZ">
-    <property name="geometry">
-     <rect>
-      <x>910</x>
-      <y>130</y>
-      <width>321</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="loadTexture">
-    <property name="geometry">
-     <rect>
-      <x>820</x>
-      <y>480</y>
-      <width>171</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Load Texture</string>
+     <string>Second image:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>190</y>
-      <width>61</width>
+      <x>840</x>
+      <y>110</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Translate X</string>
+     <string>Path: </string>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>290</y>
-      <width>61</width>
+      <x>840</x>
+      <y>200</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Translate Z</string>
+     <string>Path:</string>
     </property>
    </widget>
-   <widget class="QSlider" name="translateZ">
+   <widget class="QPushButton" name="pushButtonLoad1">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>290</y>
-      <width>321</width>
-      <height>18</height>
+      <x>969</x>
+      <y>70</y>
+      <width>211</width>
+      <height>24</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+    <property name="text">
+     <string>Load first image</string>
     </property>
    </widget>
-   <widget class="QSlider" name="translateX">
+   <widget class="QPushButton" name="pushButtonLoad2">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>190</y>
-      <width>321</width>
-      <height>18</height>
+      <x>970</x>
+      <y>160</y>
+      <width>211</width>
+      <height>24</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+    <property name="text">
+     <string>Load second image</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
+   <widget class="QLabel" name="path1Image">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>240</y>
-      <width>61</width>
+      <x>890</x>
+      <y>110</y>
+      <width>291</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Translate Y</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QSlider" name="translateY">
+   <widget class="QLabel" name="path2Image">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>240</y>
-      <width>321</width>
-      <height>18</height>
+      <x>890</x>
+      <y>200</y>
+      <width>291</width>
+      <height>16</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonSave">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>530</y>
+      <width>341</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save sequence</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEditNumOfFrames">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>490</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>490</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Number of frames:</string>
     </property>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1280</width>
+     <width>1193</width>
      <height>21</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

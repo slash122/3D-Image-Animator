@@ -11,12 +11,14 @@ CONFIG += c++17
 SOURCES += \
     DrawingModel.cpp \
     Transformations.cpp \
+    Transition.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     DrawingModel.h \
     Transformations.h \
+    Transition.h \
     mainwindow.h
 
 INCLUDEPATH += D:/qt_projects/testGFK

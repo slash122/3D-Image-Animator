@@ -3,6 +3,7 @@
 #define MAINWINDOW_H
 
 #include "Transformations.h"
+#include "Transition.h"
 #include "qgraphicsscene.h"
 #include <QMainWindow>
 #include <QtCore>
@@ -26,33 +27,29 @@ public:
 
 
 private slots:
-    void on_rotateX_sliderMoved(int position);
-    void on_rotateY_sliderMoved(int position);
-    void on_rotateZ_sliderMoved(int position);
+    void on_comboBoxTransType_currentIndexChanged(int index);
 
-    void on_loadTexture_clicked();
+    void on_pushButtonLoad1_clicked();
 
-    void on_translateX_sliderMoved(int position);
+    void on_pushButtonLoad2_clicked();
 
-    void on_translateY_sliderMoved(int position);
+    void on_horizontalSliderFrameline_sliderMoved(int position);
 
-    void on_translateZ_sliderMoved(int position);
+    void on_pushButtonSave_clicked();
 
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *mainScene;
 
-    QImage* texture;
-
     DrawingModel* drawingModel;
+    Transition* transition;
 
-    TransformationMatrices tMatrices;
-    std::vector<QVector4D> vertices;
-    std::vector<QVector3D> triangles;
+    TransitionTypes type;
+    QImage* texture1;
+    QImage* texture2;
 
-    std::vector<QVector2D> UVvertices;
-
-    void redrawTexture();
+    int currentFrame;
+    bool ComboBoxIsInitialized;
 };
 
 #endif // MAINWINDOW_H
