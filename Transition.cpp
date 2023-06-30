@@ -1,5 +1,3 @@
-//by Glib Avrutin
-
 #include "Transition.h"
 #include <QGraphicsPixmapItem>
 #include "QGraphicsBlurEffect"
@@ -335,10 +333,11 @@ void Transition::initRotationY()
     vertices1.push_back(QVector4D(1,-1,0,1)); //C
     vertices1.push_back(QVector4D(1,1,0,1)); //D
 
-    vertices2.push_back(QVector4D(1,1,0,1)); //D
-    vertices2.push_back(QVector4D(1,-1,0,1)); //C
     vertices2.push_back(QVector4D(-1,-1,0,1)); //B
     vertices2.push_back(QVector4D(-1,1,0,1)); //A
+    vertices2.push_back(QVector4D(1,1,0,1)); //D
+    vertices2.push_back(QVector4D(1,-1,0,1)); //C
+
 
     triangles.push_back(QVector3D(2,1,0)); //CBA
     triangles.push_back(QVector3D(2,0,3)); //CAD
@@ -423,14 +422,13 @@ void Transition::initRotationX()
     vertices1.push_back(QVector4D(1,-1,0,1)); //C
     vertices1.push_back(QVector4D(1,1,0,1)); //D
 
-    vertices2.push_back(QVector4D(1,1,0,1)); //D
-    vertices2.push_back(QVector4D(1,-1,0,1)); //C
     vertices2.push_back(QVector4D(-1,-1,0,1)); //B
     vertices2.push_back(QVector4D(-1,1,0,1)); //A
+    vertices2.push_back(QVector4D(1,1,0,1)); //D
+    vertices2.push_back(QVector4D(1,-1,0,1)); //C
 
     triangles.push_back(QVector3D(2,1,0)); //CBA
     triangles.push_back(QVector3D(2,0,3)); //CAD
-
 
     UVvertices.push_back(QVector2D(0,0)); //A
     UVvertices.push_back(QVector2D(0,1)); //B

@@ -1,4 +1,3 @@
-//by Glib Avrutin
 #include "DrawingModel.h"
 
 //Texel
@@ -138,7 +137,7 @@ Texel DrawingModel::sampleTexture(const QVector2D& uv, const QImage& texture)
     int tx = uv.x() * (texture.width() - 1);
     int ty = uv.y() * (texture.height() - 1);
 
-    //Czasami wypisywał pixel out of range, ale nie wiem dlaczego i nie chce, wiec dodalem taki chujowy kawalek kodu
+    //Czasami wypisywał pixel out of range, ale nie wiem dlaczego i nie chce, wiec dodalem taki zły kawałek kodu
     tx = std::min(tx,texture.width()-1);
     ty = std::min(ty,texture.height()-1);
     tx = std::max(tx,0);
