@@ -1,5 +1,3 @@
-//by Glib Avrutin
-
 #include "Transition.h"
 #include <QGraphicsPixmapItem>
 #include "QGraphicsBlurEffect"
