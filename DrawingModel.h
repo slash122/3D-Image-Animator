@@ -1,4 +1,3 @@
-//by Glib Avrutin
 #ifndef DRAWINGMODEL_H
 #define DRAWINGMODEL_H
 
