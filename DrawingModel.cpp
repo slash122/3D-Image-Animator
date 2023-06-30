@@ -1,4 +1,3 @@
-//by Glib Avrutin
 #include "DrawingModel.h"
 
 //Texel
